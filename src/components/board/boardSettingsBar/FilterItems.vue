@@ -62,7 +62,7 @@
 <style scoped>
   ::-webkit-input-placeholder {
     font-style: italic;
-    color: #cecece;
+    color: var(--text-muted);
   }
 
   .find-item-container {
@@ -78,7 +78,7 @@
     position: absolute;
     right: 42px;
     top: 5px;
-    color: #dddddd;
+    color: var(--text-muted);
     transition: opacity .3s;
     user-select: none;
   }
@@ -87,12 +87,14 @@
     position: absolute;
     top:8px;
     left:8px;
+    color: var(--text-secondary);
   }
 
   .clear-btn {
     opacity: 0;
     margin-left: -22px;
     transition: all .3s;
+    color: var(--text-secondary);
   }
 
   .btn-visible {
@@ -104,15 +106,18 @@
     border-top: 1px solid transparent;
     border-left: 1px solid transparent;
     border-right: 1px solid transparent;
-    border-bottom: 1px solid #eeeeef;
+    border-bottom: 1px solid var(--border-light);
     -webkit-transition: all .3s;
+    transition: all .3s;
     border-radius: 4px;
     padding: 4px 24px;
     width: 95%;
+    background-color: transparent;
+    color: var(--text-primary);
   }
 
   input.findItem.disabled {
-    background-color: #f8f8f8;
+    background-color: var(--bg-hover);
     cursor: no-drop;
   }
 

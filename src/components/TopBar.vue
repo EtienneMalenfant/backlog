@@ -40,7 +40,7 @@
   .topBar {
     -webkit-app-region: drag;
     -webkit-user-select: none;
-    background-color: #ffffff;
+    background-color: var(--bg-topbar);
     position: fixed;
     top: 0;
     left: 0;
@@ -51,9 +51,10 @@
     user-select: none;
     text-align: center;
     font-size: 1em;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 4px var(--shadow-medium);
     z-index: 100;
-    border: 1px solid #e4e4e4;
+    border: 1px solid var(--border-medium);
+    color: var(--text-primary);
   }
 
   .actionBtn-container {
@@ -72,7 +73,7 @@
     opacity: .4;
     -webkit-transition: all .3s;
     transition: all .3s;
-    color: #272822;
+    color: var(--text-primary);
     line-height: 2em;
   }
 
@@ -81,7 +82,7 @@
   }
 
   .actionBtn.close:hover {
-    color: #ed4014
+    color: var(--accent-error);
   }
 
   .logo-icon {

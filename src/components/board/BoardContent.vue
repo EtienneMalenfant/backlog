@@ -151,19 +151,19 @@
 
 <style scoped>
   .board-content-container {
-    background-color: #FAFCFF;
+    background-color: var(--bg-main);
     padding: 16px;
     width: 100%;
-    border-right: 1px solid #cecece;
-    box-shadow: 16px 0 64px rgba(57, 59, 62, 0.13);
+    border-right: 1px solid var(--border-dark);
+    box-shadow: 16px 0 64px var(--shadow-light);
   }
 
   .board-top-actions {
-    background-color: #fff;
+    background-color: var(--bg-card);
     padding: 32px 16px 8px 16px;
     width: 100%;
     margin-top: -16px;
-    box-shadow: 0 0 8px #e2e2e2;
+    box-shadow: 0 0 8px var(--border-medium);
     border-radius: 8px;
     margin-bottom: 4px;
     transition: all .3s;

@@ -20,6 +20,28 @@
     created() {
       this.$store.dispatch("setupKeyBindings");
       this.$store.dispatch("fetchRawBoards");
+      this.applyTheme();
+    },
+    computed: {
+      darkTheme() {
+        return this.$store.state.settings.darkTheme;
+      }
+    },
+    watch: {
+      darkTheme: {
+        handler() {
+          this.applyTheme();
+        }
+      }
+    },
+    methods: {
+      applyTheme() {
+        if (this.darkTheme) {
+          document.body.classList.add('dark-theme');
+        } else {
+          document.body.classList.remove('dark-theme');
+        }
+      }
     }
   };
 </script>
@@ -38,6 +60,7 @@
 
   body {
     overflow: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   .invisible {
@@ -50,11 +73,12 @@
   }
 
   a {
-    color: #58BB73;
+    color: var(--text-link);
+    transition: color 0.3s ease;
   }
 
   a:hover {
-    color: #338a62;
+    color: var(--text-link-hover);
   }
 
   .sync-animate {

@@ -205,7 +205,7 @@
     position: absolute;
     right: 32px;
     top: 9px;
-    color: #dddddd;
+    color: var(--text-muted);
     transition: opacity .3s;
     user-select: none;
   }

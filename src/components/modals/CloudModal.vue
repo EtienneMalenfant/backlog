@@ -5,13 +5,13 @@
          okText="Ok"
          @on-visible-change="visibleChange"
          cancelText="Cancel">
-    <div v-if="hasToken && hasNoSyncError" style="color: #41B883;">
+    <div v-if="hasToken && hasNoSyncError" style="color: var(--accent-success);">
       {{$t("cloud.connected")}}
     </div>
-    <div v-if="hasToken && !hasNoSyncError" style="color: #e43436;">
+    <div v-if="hasToken && !hasNoSyncError" style="color: var(--accent-error-alt);">
       {{$t("cloud.error_occurred")}}
     </div>
-    <div v-if="connectionError" style="color: #e43436;">
+    <div v-if="connectionError" style="color: var(--accent-error-alt);">
       {{$t("cloud.cant_connect")}}
     </div>
     <Input v-model="username"

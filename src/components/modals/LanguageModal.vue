@@ -76,7 +76,7 @@
 
   .lang-pick.active {
     font-weight: bold;
-    color: #000;
+    color: var(--text-primary);
   }
 
   .lang-pick:hover {

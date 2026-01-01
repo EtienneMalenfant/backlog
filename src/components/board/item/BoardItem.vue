@@ -306,13 +306,14 @@
   }
 
   .item.newlyAddedItem {
-    box-shadow: inset 0 0 70px rgba(98, 104, 112, 0.26);
-    border: 1px solid rgba(98, 104, 112, 0.66);
+    box-shadow: inset 0 0 70px var(--shadow-light);
+    border: 1px solid var(--accent-primary);
   }
 
   .item-text {
     font-size: 1.2em;
     margin-top: 9px;
+    color: var(--text-primary);
   }
 
   .item-text p {
@@ -335,15 +336,16 @@
   }
 
   .item {
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid var(--border-light);
     position: relative;
     min-height: 40px;
     padding-bottom: 5px;
     -webkit-border-radius: 3px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
   }
 
   .item:hover {
-    background-color: #eeeeef;
+    background-color: var(--bg-hover);
   }
 
 
@@ -385,7 +387,7 @@
   }
 
   .arrow-btn:hover {
-    color: #41B883;
+    color: var(--accent-success);
     transform: scale(1.15);
   }
 
@@ -402,7 +404,7 @@
   }
 
   .item.doneItem {
-    opacity: .35;
+    opacity: var(--opacity-done);
   }
 
   .item:hover .actionBtns {
@@ -435,8 +437,8 @@
   }
 
   .isEditing {
-    border-bottom: 1px dashed #3b3b3b;
-    border-top: 1px dashed #3b3b3b;
+    border-bottom: 1px dashed var(--border-darker);
+    border-top: 1px dashed var(--border-darker);
   }
 
   textarea.draftText {
@@ -448,17 +450,17 @@
   }
 
   .item a {
-    color: #41B883 !important;
+    color: var(--text-link-alt) !important;
     font-style: italic;
     cursor: pointer;
   }
 
   .item a:hover {
-    color: #338a62 !important;
+    color: var(--text-link-hover) !important;
   }
 
   .item >>> .link {
-    color: #41B883;
+    color: var(--text-link-alt);
     font-style: italic;
     cursor: pointer;
     -webkit-transition: all .3s;
@@ -469,7 +471,7 @@
   }
 
   .item >>> .link:hover {
-    color: #338a62;
+    color: var(--text-link-hover);
   }
 
 </style>

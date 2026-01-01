@@ -101,7 +101,7 @@
               if(fileName == ''){
                 return;
               }
-              
+
               vm.$Message.error({content: err.message, duration: 0, closable: true});
             });
         });
@@ -162,7 +162,7 @@
   }
 
   .row.title-row {
-    border-bottom: 1px solid #f3f3f3;
+    border-bottom: 1px solid var(--border-lighter);
     padding-bottom: 10px;
     margin-bottom: 20px;
     font-size: 1.5em;

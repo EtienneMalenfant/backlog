@@ -75,6 +75,17 @@
             v-if="!isEditing"
             size="16"/>
 
+      <div class="arrow-buttons">
+        <Icon type="ios-arrow-down"
+              class="arrow-btn arrow-down"
+              @click="moveItemDown"
+              size="24"/>
+        <Icon type="ios-arrow-up"
+              class="arrow-btn arrow-up"
+              @click="moveItemUp"
+              size="24"/>
+      </div>
+
       <ActionButtons @remove="removeItem"
                      @moveToTop="moveItemToTop"
                      @moveToBottom="moveItemToBottom"
@@ -215,6 +226,22 @@
         this.$store.dispatch('fetchBoardItems', this.boardId);
         this.$bus.$emit('focusOnAddItem');
       },
+      moveItemUp () {
+        this.$store.dispatch('moveItemUp', {
+          boardId: this.boardId,
+          itemId: this.itemId
+        });
+        this.$store.dispatch('fetchBoardItems', this.boardId);
+        this.$bus.$emit('focusOnAddItem');
+      },
+      moveItemDown () {
+        this.$store.dispatch('moveItemDown', {
+          boardId: this.boardId,
+          itemId: this.itemId
+        });
+        this.$store.dispatch('fetchBoardItems', this.boardId);
+        this.$bus.$emit('focusOnAddItem');
+      },
       open (link) {
         shell.openExternal(link);
       },
@@ -334,6 +361,35 @@
   }
 
   .item-div:hover .edit-icon {
+    opacity: 1;
+  }
+
+  .arrow-buttons {
+    display: flex;
+    flex-direction: row;
+    opacity: 0;
+    margin-left: auto;
+    margin-right: 6px;
+    align-self: center;
+    gap: 4px;
+    transition: opacity .3s;
+  }
+
+  .arrow-btn {
+    cursor: pointer;
+    padding: 4px;
+    line-height: 1;
+    transition: all .2s;
+    display: flex;
+    align-items: center;
+  }
+
+  .arrow-btn:hover {
+    color: #41B883;
+    transform: scale(1.15);
+  }
+
+  .item-div:hover .arrow-buttons {
     opacity: 1;
   }
 

@@ -97,6 +97,12 @@ const actions = {
   moveItemToTop(context, {boardId, itemId}) {
     boardsRepository.moveItemToTop(boardId, itemId);
   },
+  moveItemUp(context, {boardId, itemId}) {
+    boardsRepository.moveItemUp(boardId, itemId);
+  },
+  moveItemDown(context, {boardId, itemId}) {
+    boardsRepository.moveItemDown(boardId, itemId);
+  },
   removeBoard(context, boardId) {
     boardsRepository.removeBoard(boardId);
   },

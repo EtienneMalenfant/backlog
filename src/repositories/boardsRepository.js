@@ -276,9 +276,7 @@ export default {
 
     const index = items.findIndex((item) => item.id === itemId);
     const item = items.splice(index, 1)[0];
-    item.assign({
-      updated: new Date()
-    });
+    item.updated = new Date();
     items.push(item);
 
     this.saveItemsArray(boardId, items);
@@ -293,9 +291,7 @@ export default {
 
     const index = items.findIndex((item) => item.id === itemId);
     const item = items.splice(index, 1)[0];
-    item.assign({
-      updated: new Date()
-    });
+    item.updated = new Date();
     items.unshift(item);
 
     this.saveItemsArray(boardId, items);

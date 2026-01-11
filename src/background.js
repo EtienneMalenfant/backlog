@@ -2,8 +2,9 @@
 /* global __static */
 
 import {app, BrowserWindow, Menu, protocol} from 'electron';
-import {createProtocol, installVueDevtools} from 'vue-cli-plugin-electron-builder/lib';
+import {createProtocol} from 'vue-cli-plugin-electron-builder/lib';
 import windowRepository from './windowRepository';
+import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 
 const path = require('path');
 
@@ -27,7 +28,7 @@ function createWindow() {
   windowConfig.icon = path.join(__static, 'icon.png');
   windowConfig.frame = false;
   windowConfig.webPreferences = {
-    nodeIntegration: true,
+    nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION
   };
 
   // Create the browser window.
@@ -82,13 +83,13 @@ app.on('activate', () => {
 });
 
 // This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
+// initialization and is ready to create browser windows.s
 // Some APIs can only be used after this event occurs.
 app.on('ready', async() => {
   if (isDevelopment && !process.env.IS_TEST) {
     // Install Vue Devtools
     try {
-      await installVueDevtools();
+      //await installExtension(VUEJS_DEVTOOLS)
     } catch (e) {
       console.error('Vue Devtools failed to install:', e.toString());
     }

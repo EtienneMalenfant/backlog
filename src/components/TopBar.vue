@@ -16,7 +16,7 @@
 </template>
 
 <script>
-  const remote = require('electron').remote;
+  import { remote } from 'electron';
 
   export default {
     name: 'TopBar',
@@ -27,10 +27,10 @@
     },
     methods: {
       closeApp () {
-        remote.app.quit();
+        if (remote) remote.app.quit();
       },
       minimize () {
-        remote.BrowserWindow.getFocusedWindow().minimize();
+        if (remote) remote.BrowserWindow.getFocusedWindow().minimize();
       }
     }
   };

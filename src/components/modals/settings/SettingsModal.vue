@@ -56,9 +56,14 @@
   import GeneralSettings from "./GeneralSettings";
   import UpdatesCheckSettings from "./UpdatesCheckSettings";
   import DatabaseLocation from "./DatabaseLocation";
+  import { shell, remote } from "electron";
 
-  const {shell} = require("electron");
-  const {dialog} = require("electron").remote;
+  let dialog = null;
+  try {
+    dialog = remote.dialog;
+  } catch (e) {
+    dialog = null;
+  }
 
   export default {
     name: "settings-modal",

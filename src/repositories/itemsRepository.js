@@ -1,6 +1,5 @@
 import syncRepository from "./syncRepository";
-
-const {db} = require("./../persistence");
+import { db } from "./../persistence";
 
 export default {
   changeItemValue(boardId, itemId, itemVal) {

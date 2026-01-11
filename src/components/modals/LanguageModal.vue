@@ -42,7 +42,13 @@
         this.$i18n.locale = code;
       },
       getImage(code) {
-        return require(`./../../assets/flags/${code}.svg`);
+        // Dynamic import of SVG flags - returns the path for the image src
+        try {
+          return require(`./../../assets/flags/${code}.svg`);
+        } catch (e) {
+          // Fallback: construct the path manually if dynamic require fails
+          return `./assets/flags/${code}.svg`;
+        }
       },
       isLangActive(code) {
         if (!this.selectedLanguage && code === "en") {

@@ -28,7 +28,6 @@
 <script>
   import draggable from 'vuedraggable';
   import simplebar from 'simplebar-vue';
-  import 'simplebar/dist/simplebar.min.css';
 
   import MenuRow from './MenuRow';
   import BoardsTitleRow from './MenuTitleRow';

@@ -1,29 +1,21 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
+import { createApp } from 'vue';
+import { createRouter, createWebHashHistory } from 'vue-router';
 import store from './store';
 import App from './App';
 import VueShortkey from 'vue-shortkey';
-import VueI18n from 'vue-i18n';
+import { createI18n } from 'vue-i18n';
 import en from './i18n/en';
 import zh from './i18n/zh';
 import pl from './i18n/pl';
 import ptBR from './i18n/pt-BR';
 import hr from './i18n/hr';
-import {
-  Button,
-  Checkbox,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  Icon,
-  Input,
-  Message,
-  Modal,
-  Progress,
-  Tooltip,
-} from 'iview';
+import ElementPlus from 'element-plus';
+import 'element-plus/dist/index.css';
+import 'simplebar-vue/dist/simplebar.min.css';
 import BoardContent from './components/board/BoardContent.vue';
 import VueTextareaAutosize from 'vue-textarea-autosize';
+import mitt from 'mitt';
+//import 'autolink-js';
 
 const messages = {
   en: en,
@@ -33,63 +25,49 @@ const messages = {
   hr: hr,
 };
 
-Vue.use(VueI18n);
-const i18n = new VueI18n({
+const i18n = createI18n({
+  legacy: false,
   locale: 'en',
   messages,
   fallbackLocale: 'en',
 });
 
-require('autolink-js');
-
-Vue.config.productionTip = false;
-Vue.config.devtools = process.env.NODE_ENV !== 'production';
-
-const EventBus = new Vue();
-
-Object.defineProperties(Vue.prototype, {
-  $bus: {
-    get: function () {
-      return EventBus;
-    },
-  },
-});
-Vue.use(VueShortkey);
-Vue.use(VueTextareaAutosize);
-Vue.component('Button', Button);
-Vue.component('Icon', Icon);
-Vue.component('Tooltip', Tooltip);
-Vue.component('Modal', Modal);
-Vue.component('Input', Input);
-Vue.component('Dropdown', Dropdown);
-Vue.component('DropdownMenu', DropdownMenu);
-Vue.component('DropdownItem', DropdownItem);
-Vue.component('Checkbox', Checkbox);
-Vue.component('Progress', Progress);
-Vue.use(VueRouter);
-Vue.prototype.$Message = Message;
-Vue.prototype.$Modal = Modal;
-
-Vue.directive('focus', {
-  componentUpdated: function (el) {
-    el.getElementsByTagName('input')[0].focus();
-  },
-});
-
-Vue.filter('metaTextReplacer', text => text.replace('META', '⌘'));
-Vue.filter('shiftTextReplacer', text => text.replace('SHIFT', '⇧'));
-
 const routes = [
   {path: '/board/:boardId/:itemId?', component: BoardContent},
 ];
 
-const router = new VueRouter({
+const router = createRouter({
+  history: createWebHashHistory(),
   routes,
 });
 
-new Vue({
-  i18n,
-  store,
-  router,
-  render: h => h(App),
-}).$mount('#app');
+const app = createApp(App);
+
+// Global event bus for Vue 3
+const emitter = mitt();
+app.config.globalProperties.$bus = {
+  $on: emitter.on,
+  $emit: emitter.emit,
+  $off: emitter.off
+};
+
+app.use(i18n);
+app.use(store);
+app.use(router);
+app.use(VueShortkey);
+app.use(VueTextareaAutosize);
+app.use(ElementPlus);
+
+app.directive('focus', {
+  updated(el) {
+    const input = el.getElementsByTagName('input')[0];
+    if (input) input.focus();
+  },
+});
+
+app.config.globalProperties.$filters = {
+  metaTextReplacer: (text) => text.replace('META', '⌘'),
+  shiftTextReplacer: (text) => text.replace('SHIFT', '⇧'),
+};
+
+app.mount('#app');

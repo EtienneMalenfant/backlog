@@ -1,9 +1,8 @@
 import syncRepository from "./syncRepository";
-
-const {db} = require("./../persistence");
-
-const shortid = require("shortid");
-const fs = require("electron").remote.require("fs");
+import { db } from "./../persistence";
+import shortid from "shortid";
+import { remote } from "electron";
+import fs from "fs";
 
 function defaultBoard() {
   return {

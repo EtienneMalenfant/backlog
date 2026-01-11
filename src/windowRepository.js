@@ -1,6 +1,6 @@
-const low = require('lowdb');
-const FileSync = require('lowdb/adapters/FileSync');
-const fs = require('fs');
+import low from 'lowdb';
+import FileSync from 'lowdb/adapters/FileSync';
+import fs from 'fs';
 
 export default function (userAppPath) {
   if (!fs.existsSync(userAppPath.split('window.json')[0])) {

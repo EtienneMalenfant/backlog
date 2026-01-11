@@ -1,8 +1,7 @@
 import axios from 'axios';
 import cloudSettings from './../cloud';
 import {DiffPatcher} from 'jsondiffpatch';
-
-const {db} = require('./../persistence');
+import { db } from './../persistence';
 
 const jsDiff = new DiffPatcher({
   objectHash: (obj) => {

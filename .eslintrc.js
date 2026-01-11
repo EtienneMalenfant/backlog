@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   root: true,
   env: {
     node: true
@@ -13,6 +13,7 @@ module.exports = {
     'vue/no-use-v-if-with-v-for': 'off'
   },
   parserOptions: {
-    parser: 'babel-eslint'
+    parser: 'babel-eslint',
+    ecmaVersion: 2020
   }
 }

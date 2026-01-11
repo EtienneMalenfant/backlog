@@ -1,14 +1,15 @@
-const low = require('lowdb');
-const FileSync = require('lowdb/adapters/FileSync');
-const lodashId = require('lodash-id');
+import low from 'lowdb';
+import FileSync from 'lowdb/adapters/FileSync';
+import lodashId from 'lodash-id';
+import { remote } from 'electron';
 
-const userDataPath = require('electron').remote.getCurrentWindow().userDataPath;
+const userDataPath = remote.getCurrentWindow().userDataPath;
 
 const dataAdapter = new FileSync(userDataPath);
 let db = low(dataAdapter);
 
 db._.mixin(lodashId);
 
-module.exports = {
+export {
   db
 };

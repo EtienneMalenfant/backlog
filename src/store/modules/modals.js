@@ -1,6 +1,6 @@
 import boardsRepository from "./../../repositories/boardsRepository";
+import { remote } from "electron";
 
-const remote = require("electron").remote;
 const version = remote.app.getVersion();
 
 const state = {

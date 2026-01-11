@@ -52,7 +52,7 @@
 </template>
 
 <script>
-  import {Switch} from 'iview';
+  import { ElSwitch } from 'element-plus';
   import keyShortcutMixin from './../../keyShortcutStringMixin';
   import EmojiPicker from './EmojiPicker';
   import EmojiButton from './item/EmojiButton';

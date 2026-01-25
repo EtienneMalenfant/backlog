@@ -6,9 +6,10 @@ import {createProtocol} from 'vue-cli-plugin-electron-builder/lib';
 import windowRepository from './windowRepository';
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 
-const path = require('path');
 
-require('electron-context-menu')();
+import path from 'path';
+import electronContextMenu from 'electron-context-menu';
+electronContextMenu();
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 

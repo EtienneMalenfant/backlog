@@ -57,8 +57,9 @@
   import UpdatesCheckSettings from "./UpdatesCheckSettings";
   import DatabaseLocation from "./DatabaseLocation";
 
-  const {shell} = require("electron");
-  const {dialog} = require("electron").remote;
+  import electron from "electron";
+  const { shell } = electron;
+  const { dialog } = electron.remote;
 
   export default {
     name: "settings-modal",

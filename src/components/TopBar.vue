@@ -16,7 +16,8 @@
 </template>
 
 <script>
-  const remote = require('electron').remote;
+  import electron from 'electron';
+  const remote = electron.remote;
 
   export default {
     name: 'TopBar',

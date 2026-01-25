@@ -32,8 +32,9 @@
 
 <script>
   import axios from 'axios';
-  const { shell } = require('electron');
-  const version = require('electron').remote.app.getVersion();
+  import electron from 'electron';
+  const { shell } = electron;
+  const version = electron.remote.app.getVersion();
 
   export default {
     name: 'UpdatesCheckSettings',

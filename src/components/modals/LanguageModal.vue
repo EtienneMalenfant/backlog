@@ -41,8 +41,10 @@
         this.$store.dispatch("changeLanguage", code);
         this.$i18n.locale = code;
       },
-      getImage(code) {
-        return require(`./../../assets/flags/${code}.svg`);
+      async getImage(code) {
+        // Dynamic import for ES6 modules
+        const img = await import(`./../../assets/flags/${code}.svg`);
+        return img.default || img;
       },
       isLangActive(code) {
         if (!this.selectedLanguage && code === "en") {

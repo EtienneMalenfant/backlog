@@ -1,9 +1,8 @@
 import syncRepository from "./syncRepository";
 
-const {db} = require("./../persistence");
-
-const shortid = require("shortid");
-const fs = require("electron").remote.require("fs");
+import { db } from "./../persistence";
+import shortid from "shortid";
+import fs from "fs";
 
 function defaultBoard() {
   return {
@@ -149,7 +148,7 @@ export default {
     });
   },
   get() {
-    console.log(`${JSON.stringify(db.getState())}`);
+    //console.log(`${JSON.stringify(db.getState())}`);
   },
   getActiveBoard() {
     return db.get("activeBoard")

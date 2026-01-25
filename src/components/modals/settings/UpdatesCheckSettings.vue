@@ -32,8 +32,10 @@
 
 <script>
   import axios from 'axios';
-  const { shell } = require('electron');
-  const version = require('electron').remote.app.getVersion();
+  import { shell } from 'electron';
+  import processModule from 'process';
+  const { env } = processModule;
+  const version = env.BACKLOG_APP_VERSION || "";
 
   export default {
     name: 'UpdatesCheckSettings',

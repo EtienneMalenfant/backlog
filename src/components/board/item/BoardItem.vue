@@ -105,7 +105,8 @@
   import keyShortcutMixin from './../../../keyShortcutStringMixin';
   import EmojiPicker from './../EmojiPicker';
   import EmojiButton from './EmojiButton';
-  const { shell } = require('electron');
+  import electron from 'electron';
+  const { shell } = electron;
 
   const md = new MarkdownIt({
     breaks: true

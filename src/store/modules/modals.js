@@ -1,7 +1,8 @@
 import boardsRepository from "./../../repositories/boardsRepository";
 
-const remote = require("electron").remote;
-const version = remote.app.getVersion();
+import processModule from "process";
+const { env } = processModule;
+const version = env.BACKLOG_APP_VERSION || "";
 
 const state = {
   cloud: {

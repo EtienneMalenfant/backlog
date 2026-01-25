@@ -1,14 +1,18 @@
-const low = require('lowdb');
-const FileSync = require('lowdb/adapters/FileSync');
-const lodashId = require('lodash-id');
+import low from 'lowdb';
+import FileSync from 'lowdb/adapters/FileSync';
+import lodashId from 'lodash-id';
+import processModule from 'process';
 
-const userDataPath = require('electron').remote.getCurrentWindow().userDataPath;
+const { env } = processModule;
+const userDataPath = env.BACKLOG_USER_DATA_PATH;
+
+if (!userDataPath) {
+	throw new Error('BACKLOG_USER_DATA_PATH is not defined; set it in the main process before creating windows.');
+}
 
 const dataAdapter = new FileSync(userDataPath);
 let db = low(dataAdapter);
 
 db._.mixin(lodashId);
 
-module.exports = {
-  db
-};
+export { db };

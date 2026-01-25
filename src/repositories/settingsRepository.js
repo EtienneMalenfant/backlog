@@ -1,4 +1,4 @@
-const {db} = require("./../persistence");
+import { db } from "./../persistence";
 
 const keyBindings = {
   acceptItemChange: {

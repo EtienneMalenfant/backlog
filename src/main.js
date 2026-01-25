@@ -40,7 +40,7 @@ const i18n = new VueI18n({
   fallbackLocale: 'en',
 });
 
-require('autolink-js');
+import 'autolink-js';
 
 Vue.config.productionTip = false;
 Vue.config.devtools = process.env.NODE_ENV !== 'production';

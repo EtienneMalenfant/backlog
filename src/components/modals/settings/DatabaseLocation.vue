@@ -6,7 +6,8 @@
 </template>
 
 <script>
-  const remote = require('electron').remote;
+  import processModule from 'process';
+  const { env } = processModule;
 
   export default {
     name: 'DatabaseLocation',
@@ -22,7 +23,7 @@
     },
     created () {
       if (!this.dbLocation) {
-        this.$store.dispatch('setDbLocation', remote.getGlobal('userDataPath'));
+        this.$store.dispatch('setDbLocation', env.BACKLOG_USER_DATA_PATH || '');
       }
     }
   };

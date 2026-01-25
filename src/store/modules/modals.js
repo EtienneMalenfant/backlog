@@ -1,8 +1,8 @@
 import boardsRepository from "./../../repositories/boardsRepository";
 
-import electron from "electron";
-const remote = electron.remote;
-const version = remote.app.getVersion();
+import processModule from "process";
+const { env } = processModule;
+const version = env.BACKLOG_APP_VERSION || "";
 
 const state = {
   cloud: {

@@ -1,7 +1,7 @@
 'use strict';
 /* global __static */
 
-import {app, BrowserWindow, Menu, protocol} from 'electron';
+import {app, BrowserWindow, Menu, protocol, ipcMain, dialog} from 'electron';
 import {createProtocol} from 'vue-cli-plugin-electron-builder/lib';
 import windowRepository from './windowRepository';
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
@@ -18,23 +18,25 @@ const windowSettings = windowRepository(path.join(app.getPath('userData'), 'wind
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
+let userDataPath;
 
 // Standard scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([{scheme: 'app', privileges: {secure: true}}]);
 
 
-function createWindow() {
+function createWindow(userDataPath) {
   windowSettings.updateWindowState({minWidth: 600});
   const windowConfig = windowSettings.getWindowState();
   windowConfig.icon = path.join(__static, 'icon.png');
   windowConfig.frame = false;
   windowConfig.webPreferences = {
-    nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION
+    nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
+    contextIsolation: false
   };
 
   // Create the browser window.
   win = new BrowserWindow(windowConfig);
-  win.userDataPath = path.join(app.getPath('userData'), 'backlog.json');
+  win.userDataPath = userDataPath;
 
   if (process.platform === 'darwin') {
     Menu.setApplicationMenu(createMenuOnMac());
@@ -79,7 +81,7 @@ app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (win === null) {
-    createWindow();
+    createWindow(userDataPath);
   }
 });
 
@@ -87,6 +89,31 @@ app.on('activate', () => {
 // initialization and is ready to create browser windows.s
 // Some APIs can only be used after this event occurs.
 app.on('ready', async() => {
+  userDataPath = path.join(app.getPath('userData'), 'backlog.json');
+  process.env.BACKLOG_USER_DATA_PATH = userDataPath;
+  process.env.BACKLOG_APP_VERSION = app.getVersion();
+
+  ipcMain.on('app:quit', () => {
+    app.quit();
+  });
+
+  ipcMain.on('window:minimize', (event) => {
+    const win = BrowserWindow.fromWebContents(event.sender);
+    if (win) {
+      win.minimize();
+    }
+  });
+
+  ipcMain.handle('dialog:showSave', async(event, options) => {
+    const result = await dialog.showSaveDialog(options);
+    return result;
+  });
+
+  ipcMain.handle('dialog:showOpen', async(event, options) => {
+    const result = await dialog.showOpenDialog(options);
+    return result;
+  });
+
   if (isDevelopment && !process.env.IS_TEST) {
     // Install Vue Devtools
     try {
@@ -95,7 +122,7 @@ app.on('ready', async() => {
       console.error('Vue Devtools failed to install:', e.toString());
     }
   }
-  createWindow();
+  createWindow(userDataPath);
 });
 
 // Exit cleanly on request from parent process in development mode.

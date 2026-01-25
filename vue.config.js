@@ -10,6 +10,9 @@ module.exports = {
     }
   },
   configureWebpack: {
+    externals: {
+      events: 'commonjs events'
+    }
   },
   pluginOptions: {
     electronBuilder: {

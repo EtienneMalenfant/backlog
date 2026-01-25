@@ -16,8 +16,7 @@
 </template>
 
 <script>
-  import electron from 'electron';
-  const remote = electron.remote;
+  import { ipcRenderer } from 'electron';
 
   export default {
     name: 'TopBar',
@@ -28,10 +27,10 @@
     },
     methods: {
       closeApp () {
-        remote.app.quit();
+        ipcRenderer.send('app:quit');
       },
       minimize () {
-        remote.BrowserWindow.getFocusedWindow().minimize();
+        ipcRenderer.send('window:minimize');
       }
     }
   };

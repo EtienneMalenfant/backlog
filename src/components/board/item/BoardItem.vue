@@ -4,9 +4,6 @@
        :data-id="itemId"
        :data-boardId="boardId"
        :draggable="isEditing">
-    <div class="drag" v-if="isEditing">
-      <Icon type="md-reorder"></Icon>
-    </div>
     <Transition name="fade" v-if="isEditing">
       <EmojiPicker @addEmoji="addEmoji"
                    @closeEmoji="hideEmoji"
@@ -75,15 +72,8 @@
             v-if="!isEditing"
             size="16"/>
 
-      <div class="arrow-buttons">
-        <Icon type="ios-arrow-down"
-              class="arrow-btn arrow-down"
-              @click="moveItemDown"
-              size="24"/>
-        <Icon type="ios-arrow-up"
-              class="arrow-btn arrow-up"
-              @click="moveItemUp"
-              size="24"/>
+      <div class="drag">
+        <Icon type="md-reorder"></Icon>
       </div>
 
       <ActionButtons @remove="removeItem"
@@ -227,22 +217,6 @@
         this.$store.dispatch('fetchBoardItems', this.boardId);
         this.$bus.$emit('focusOnAddItem');
       },
-      moveItemUp () {
-        this.$store.dispatch('moveItemUp', {
-          boardId: this.boardId,
-          itemId: this.itemId
-        });
-        this.$store.dispatch('fetchBoardItems', this.boardId);
-        this.$bus.$emit('focusOnAddItem');
-      },
-      moveItemDown () {
-        this.$store.dispatch('moveItemDown', {
-          boardId: this.boardId,
-          itemId: this.itemId
-        });
-        this.$store.dispatch('fetchBoardItems', this.boardId);
-        this.$bus.$emit('focusOnAddItem');
-      },
       open (link) {
         shell.openExternal(link);
       },
@@ -322,13 +296,22 @@
   }
 
   .drag {
-    position: absolute;
-    width: 25px;
-    height: 100%;
-    left: 2px;
-    cursor: move;
-    font-size: 1.5em;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    margin-top: 8px;
+    font-size: 2em;
+    cursor: grab;
+    opacity: 0;
+    transition: opacity .3s;
+  }
 
+  .drag:active {
+    cursor: grabbing;
+  }
+
+  .item-div:hover .drag {
+    opacity: 1;
   }
 
   .item-div {
@@ -340,7 +323,6 @@
     border-bottom: 1px solid var(--border-light);
     position: relative;
     min-height: 40px;
-    padding-bottom: 5px;
     -webkit-border-radius: 3px;
     transition: background-color 0.3s ease, border-color 0.3s ease;
   }
@@ -367,34 +349,6 @@
     opacity: 1;
   }
 
-  .arrow-buttons {
-    display: flex;
-    flex-direction: row;
-    opacity: 0;
-    margin-left: auto;
-    margin-right: 6px;
-    align-self: center;
-    gap: 4px;
-    transition: opacity .3s;
-  }
-
-  .arrow-btn {
-    cursor: pointer;
-    padding: 4px;
-    line-height: 1;
-    transition: all .2s;
-    display: flex;
-    align-items: center;
-  }
-
-  .arrow-btn:hover {
-    color: var(--accent-success);
-    transform: scale(1.15);
-  }
-
-  .item-div:hover .arrow-buttons {
-    opacity: 1;
-  }
 
   .movable-icon {
     position: absolute;

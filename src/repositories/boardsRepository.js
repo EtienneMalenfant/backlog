@@ -295,38 +295,6 @@ export default {
 
     this.saveItemsArray(boardId, items);
   },
-  moveItemUp(boardId, itemId) {
-    const board = db
-      .get("boards")
-      .find({id: boardId});
-    const items = board
-      .get("items")
-      .value();
-
-    const index = items.findIndex((item) => item.id === itemId);
-    if (index > 0) {
-      const item = items.splice(index, 1)[0];
-      item.updated = new Date();
-      items.splice(index - 1, 0, item);
-      this.saveItemsArray(boardId, items);
-    }
-  },
-  moveItemDown(boardId, itemId) {
-    const board = db
-      .get("boards")
-      .find({id: boardId});
-    const items = board
-      .get("items")
-      .value();
-
-    const index = items.findIndex((item) => item.id === itemId);
-    if (index < items.length - 1 && index !== -1) {
-      const item = items.splice(index, 1)[0];
-      item.updated = new Date();
-      items.splice(index + 1, 0, item);
-      this.saveItemsArray(boardId, items);
-    }
-  },
   removeBoard(boardId) {
     const boards = db.get("boards");
     const oldBoardsVal = boards.cloneDeep().value();

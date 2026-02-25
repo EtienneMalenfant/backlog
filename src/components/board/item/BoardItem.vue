@@ -22,6 +22,7 @@
       autofocus="autofocus"
       class="ivu-input draftText animated"
       @keyup.esc.native="turnOffEditing"
+      @keydown.enter.exact.native.prevent="saveItem(); turnOffEditing();"
       @keydown.meta.69.native="showEmoji"
       @keydown.ctrl.69.native="showEmoji"
       @click.native="trackCaret"
@@ -36,7 +37,6 @@
             @click="saveItem(); turnOffEditing();"
     >
       {{$t('common.ok')}}
-      <span class="shortcut">{{shortcutString('acceptItemChange')}}</span>
     </Button>
     <button v-if="isEditing"
             style="display:none;"

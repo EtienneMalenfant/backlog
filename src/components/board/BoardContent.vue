@@ -32,6 +32,7 @@
          :style="isAllItemsDone? {height:'calc(100vh - 400px)'} : null">
       <draggable :value="boardItems"
                  handle=".drag"
+                 :force-fallback="true"
                  @change="boardItemsRearanged"
       >
         <transition-group name="list-complete">
@@ -191,7 +192,19 @@
   }
 
   .sortable-ghost {
-    opacity: 0;
+    background-color: var(--bg-drag);
+    opacity: var(--opacity-drag);
+    box-shadow: var(--shadow-drag);
+    border-radius: 4px;
+    cursor: grabbing !important;
+  }
+
+  .sortable-chosen {
+    background-color: var(--bg-drag);
+  }
+
+  .sortable-fallback {
+    opacity: 0 !important;
   }
 
   .list-complete-item {

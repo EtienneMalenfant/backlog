@@ -25,6 +25,11 @@
 <script>
   export default {
     name: "LanguageModal",
+    data() {
+      return {
+        flagImages: {}
+      };
+    },
     computed: {
       isVisible() {
         return this.$store.state.modals.language.isVisible;
@@ -36,15 +41,27 @@
         return this.$store.state.settings.languages;
       },
     },
+    async created() {
+      await this.preloadImages();
+    },
     methods: {
+      async preloadImages() {
+        const imagePromises = this.languages.map(async (lang) => {
+          try {
+            const img = await import(`./../../assets/flags/${lang.code}.svg`);
+            this.flagImages[lang.code] = img.default || img;
+          } catch (error) {
+            console.error(`Failed to load flag for ${lang.code}:`, error);
+          }
+        });
+        await Promise.all(imagePromises);
+      },
       changeLocale(code) {
         this.$store.dispatch("changeLanguage", code);
         this.$i18n.locale = code;
       },
-      async getImage(code) {
-        // Dynamic import for ES6 modules
-        const img = await import(`./../../assets/flags/${code}.svg`);
-        return img.default || img;
+      getImage(code) {
+        return this.flagImages[code] || '';
       },
       isLangActive(code) {
         if (!this.selectedLanguage && code === "en") {

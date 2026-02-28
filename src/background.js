@@ -86,7 +86,7 @@ app.on('activate', () => {
 });
 
 // This method will be called when Electron has finished
-// initialization and is ready to create browser windows.s
+// initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', async() => {
   userDataPath = path.join(app.getPath('userData'), 'backlog.json');

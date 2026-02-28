@@ -90,8 +90,12 @@ app.on('activate', () => {
 // Some APIs can only be used after this event occurs.
 app.on('ready', async() => {
   userDataPath = path.join(app.getPath('userData'), 'backlog.json');
-  process.env.BACKLOG_USER_DATA_PATH = userDataPath;
   process.env.BACKLOG_APP_VERSION = app.getVersion();
+
+  // Register IPC handlers before createWindow so they are available when the renderer starts.
+  ipcMain.on('app:getUserDataPath', (event) => {
+    event.returnValue = userDataPath;
+  });
 
   ipcMain.on('app:quit', () => {
     app.quit();

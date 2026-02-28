@@ -1,13 +1,12 @@
 import low from 'lowdb';
 import FileSync from 'lowdb/adapters/FileSync';
 import lodashId from 'lodash-id';
-import processModule from 'process';
+import { ipcRenderer } from 'electron';
 
-const { env } = processModule;
-const userDataPath = env.BACKLOG_USER_DATA_PATH;
+const userDataPath = ipcRenderer.sendSync('app:getUserDataPath');
 
 if (!userDataPath) {
-	throw new Error('BACKLOG_USER_DATA_PATH is not defined; set it in the main process before creating windows.');
+	throw new Error('Failed to retrieve user data path from main process via IPC.');
 }
 
 const dataAdapter = new FileSync(userDataPath);

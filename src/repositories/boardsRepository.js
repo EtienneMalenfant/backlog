@@ -147,9 +147,6 @@ export default {
       });
     });
   },
-  get() {
-    //console.log(`${JSON.stringify(db.getState())}`);
-  },
   getActiveBoard() {
     return db.get("activeBoard")
       .cloneDeep()

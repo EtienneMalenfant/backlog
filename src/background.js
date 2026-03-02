@@ -30,7 +30,7 @@ function createWindow(userDataPath) {
   windowConfig.icon = path.join(__static, 'icon.png');
   windowConfig.frame = false;
   windowConfig.webPreferences = {
-    nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
+    nodeIntegration: true,
     contextIsolation: false
   };
 

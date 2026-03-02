@@ -1,9 +1,8 @@
 import syncRepository from "./syncRepository";
 
-const {db} = require("./../persistence");
-
-const shortid = require("shortid");
-const fs = require("electron").remote.require("fs");
+import { db } from "./../persistence";
+import shortid from "shortid";
+import fs from "fs";
 
 function defaultBoard() {
   return {
@@ -148,9 +147,6 @@ export default {
       });
     });
   },
-  get() {
-    console.log(`${JSON.stringify(db.getState())}`);
-  },
   getActiveBoard() {
     return db.get("activeBoard")
       .cloneDeep()
@@ -276,9 +272,7 @@ export default {
 
     const index = items.findIndex((item) => item.id === itemId);
     const item = items.splice(index, 1)[0];
-    item.assign({
-      updated: new Date()
-    });
+    item.updated = new Date();
     items.push(item);
 
     this.saveItemsArray(boardId, items);
@@ -293,9 +287,7 @@ export default {
 
     const index = items.findIndex((item) => item.id === itemId);
     const item = items.splice(index, 1)[0];
-    item.assign({
-      updated: new Date()
-    });
+    item.updated = new Date();
     items.unshift(item);
 
     this.saveItemsArray(boardId, items);

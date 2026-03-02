@@ -91,14 +91,16 @@
     width: 100%;
     font-size: 18px;
     border: 0;
-    border-bottom: 1px solid #cecece;
-    color: #373636;
+    border-bottom: 1px solid var(--border-dark);
+    color: var(--text-primary);
     padding: 8px;
     text-align: center;
+    background-color: transparent;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
   }
 
   input.search-input::placeholder {
-    color: #cecece;
+    color: var(--text-muted);
   }
 
   input.search-input:focus {
@@ -107,7 +109,7 @@
   }
 
   .board-name {
-    background-color: #626870;
+    background-color: var(--accent-primary);
     color: white;
     border-radius: 4px;
     padding: 4px 8px;
@@ -123,16 +125,16 @@
     padding-right: 8px;
     padding-left: 8px;
     padding-bottom: 0;
-    border-bottom: 1px dotted #cecece;
+    border-bottom: 1px dotted var(--border-dark);
   }
 
   .item.done {
-    background-color: #e8e8e8;
-    color: #b5b5b5;
+    background-color: var(--bg-hover);
+    color: var(--text-secondary);
   }
 
   .item:hover {
-  background-color: rgba(88, 187, 115, 0.31);
+  background-color: var(--bg-hover);
   }
 
 

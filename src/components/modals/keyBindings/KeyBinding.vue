@@ -120,7 +120,7 @@
 
   .capturing i {
     animation: flickerAnimation 1.5s infinite;
-    color: #e43436;
+    color: var(--accent-error-alt);
   }
 
 
@@ -129,11 +129,11 @@
     display: inline-block;
     margin: 0 1px 2px;
     padding: 4px;
-    border: 1px solid #e6e6e6;
+    border: 1px solid var(--border-medium);
     border-radius: 4px;
     white-space: nowrap;
     letter-spacing: .2px;
-    background: #fafafa;
+    background: var(--bg-card);
     font-family: inherit;
     line-height: 1em;
     -webkit-transition: background-color .6s;
@@ -141,9 +141,9 @@
   }
 
   kbd.capturing {
-    border: 1px solid #62676E;
-    background: #fafafa;
-    box-shadow: 0 0 4px rgb(88, 187, 115);
+    border: 1px solid var(--accent-primary);
+    background: var(--bg-card);
+    box-shadow: 0 0 4px var(--accent-success);
   }
 
 </style>

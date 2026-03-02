@@ -105,7 +105,7 @@
 
 <style scoped>
   h1 {
-    color: #717171;
+    color: var(--text-secondary);
     margin-top: 16px;
   }
 </style>

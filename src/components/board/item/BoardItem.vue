@@ -4,9 +4,6 @@
        :data-id="itemId"
        :data-boardId="boardId"
        :draggable="isEditing">
-    <div class="drag" v-if="isEditing">
-      <Icon type="md-reorder"></Icon>
-    </div>
     <Transition name="fade" v-if="isEditing">
       <EmojiPicker @addEmoji="addEmoji"
                    @closeEmoji="hideEmoji"
@@ -25,6 +22,7 @@
       autofocus="autofocus"
       class="ivu-input draftText animated"
       @keyup.esc.native="turnOffEditing"
+      @keydown.enter.exact.native.prevent="saveItem(); turnOffEditing();"
       @keydown.meta.69.native="showEmoji"
       @keydown.ctrl.69.native="showEmoji"
       @click.native="trackCaret"
@@ -39,7 +37,6 @@
             @click="saveItem(); turnOffEditing();"
     >
       {{$t('common.ok')}}
-      <span class="shortcut">{{shortcutString('acceptItemChange')}}</span>
     </Button>
     <button v-if="isEditing"
             style="display:none;"
@@ -75,6 +72,10 @@
             v-if="!isEditing"
             size="16"/>
 
+      <div class="drag">
+        <Icon type="md-reorder"></Icon>
+      </div>
+
       <ActionButtons @remove="removeItem"
                      @moveToTop="moveItemToTop"
                      @moveToBottom="moveItemToBottom"
@@ -94,7 +95,8 @@
   import keyShortcutMixin from './../../../keyShortcutStringMixin';
   import EmojiPicker from './../EmojiPicker';
   import EmojiButton from './EmojiButton';
-  const { shell } = require('electron');
+  import electron from 'electron';
+  const { shell } = electron;
 
   const md = new MarkdownIt({
     breaks: true
@@ -279,13 +281,14 @@
   }
 
   .item.newlyAddedItem {
-    box-shadow: inset 0 0 70px rgba(98, 104, 112, 0.26);
-    border: 1px solid rgba(98, 104, 112, 0.66);
+    box-shadow: inset 0 0 70px var(--shadow-light);
+    border: 1px solid var(--accent-primary);
   }
 
   .item-text {
     font-size: 1.2em;
     margin-top: 9px;
+    color: var(--text-primary);
   }
 
   .item-text p {
@@ -293,13 +296,22 @@
   }
 
   .drag {
-    position: absolute;
-    width: 25px;
-    height: 100%;
-    left: 2px;
-    cursor: move;
-    font-size: 1.5em;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    margin-top: 8px;
+    font-size: 2em;
+    cursor: grab;
+    opacity: 0;
+    transition: opacity .3s;
+  }
 
+  .drag:active {
+    cursor: grabbing;
+  }
+
+  .item-div:hover .drag {
+    opacity: 1;
   }
 
   .item-div {
@@ -308,15 +320,15 @@
   }
 
   .item {
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid var(--border-light);
     position: relative;
     min-height: 40px;
-    padding-bottom: 5px;
     -webkit-border-radius: 3px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
   }
 
   .item:hover {
-    background-color: #eeeeef;
+    background-color: var(--bg-hover);
   }
 
 
@@ -337,6 +349,7 @@
     opacity: 1;
   }
 
+
   .movable-icon {
     position: absolute;
     top: 10px;
@@ -346,7 +359,7 @@
   }
 
   .item.doneItem {
-    opacity: .35;
+    opacity: var(--opacity-done);
   }
 
   .item:hover .actionBtns {
@@ -379,8 +392,8 @@
   }
 
   .isEditing {
-    border-bottom: 1px dashed #3b3b3b;
-    border-top: 1px dashed #3b3b3b;
+    border-bottom: 1px dashed var(--border-darker);
+    border-top: 1px dashed var(--border-darker);
   }
 
   textarea.draftText {
@@ -392,17 +405,17 @@
   }
 
   .item a {
-    color: #41B883 !important;
+    color: var(--text-link-alt) !important;
     font-style: italic;
     cursor: pointer;
   }
 
   .item a:hover {
-    color: #338a62 !important;
+    color: var(--text-link-hover) !important;
   }
 
   .item >>> .link {
-    color: #41B883;
+    color: var(--text-link-alt);
     font-style: italic;
     cursor: pointer;
     -webkit-transition: all .3s;
@@ -413,7 +426,7 @@
   }
 
   .item >>> .link:hover {
-    color: #338a62;
+    color: var(--text-link-hover);
   }
 
 </style>

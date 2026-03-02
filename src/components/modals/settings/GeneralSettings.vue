@@ -1,6 +1,11 @@
 <template>
   <div>
     <div class="row">
+      <Checkbox v-model="darkTheme">
+        {{$t('modals.dark_mode')}}
+      </Checkbox>
+    </div>
+    <div class="row">
       <Checkbox v-model="itemCreationDate">
         {{$t('modals.show_creation_date_for_each_item')}}
       </Checkbox>

@@ -12,6 +12,8 @@ module.exports = {
   configureWebpack: {
   },
   pluginOptions: {
-    electronBuilder: {}
+    electronBuilder: {
+      nodeIntegration: true
+    }
   }
 };

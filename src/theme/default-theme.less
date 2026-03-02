@@ -1,3 +1,327 @@
 @import '~iview/src/styles/index.less';
 
 @primary-color: #626870;
+
+// CSS Custom Properties for Dark Mode Support
+:root {
+  // Backgrounds
+  --bg-main: #FAFCFF;
+  --bg-card: #ffffff;
+  --bg-panel: #ffffff;
+  --bg-topbar: #ffffff;
+  --bg-hover: #eeeeef;
+  --bg-menu: #435463; // Menu sidebar stays same in both modes
+  --bg-menu-action: #404c5a;
+
+  // Text colors
+  --text-primary: #2c3e50;
+  --text-secondary: #979797;
+  --text-muted: #cecece;
+  --text-menu: #ffffff;
+  --text-link: #58BB73;
+  --text-link-hover: #338a62;
+  --text-link-alt: #41B883;
+
+  // Borders
+  --border-light: #f0f0f0;
+  --border-lighter: #f3f3f3;
+  --border-medium: #e4e4e4;
+  --border-dark: #cecece;
+  --border-darker: #3b3b3b;
+
+  // Accents
+  --accent-primary: #626870;
+  --accent-success: #41B883;
+  --accent-success-alt: #58BB73;
+  --accent-error: #ed4014;
+  --accent-error-alt: #e43436;
+
+  // Shadows
+  --shadow-light: rgba(0, 0, 0, 0.1);
+  --shadow-medium: rgba(0, 0, 0, 0.2);
+
+  // Opacity
+  --opacity-done: 0.35;
+
+  // Drag styling
+  --bg-drag: #f5f7fa;
+  --opacity-drag: 0.9;
+  --shadow-drag: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  // Transitions
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+// Webkit Scrollbar (Chromium/Electron)
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--border-medium);
+  border-radius: 4px;
+  border: none;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--border-dark);
+}
+
+// Dark Mode Theme
+.dark-theme {
+  // Backgrounds - Inverted palette
+  --bg-main: #2e3546;
+  --bg-card: #232430;
+  --bg-panel: #2a2a2a;
+  --bg-topbar: #2a2a2a;
+  --bg-hover: #2626386e;
+  --bg-menu: #435463; // Menu sidebar stays same
+  --bg-menu-action: #404c5a;
+
+  // Text colors - Lighter for dark backgrounds
+  --text-primary: #e0e0e0;
+  --text-secondary: #a0a0a0;
+  --text-muted: #707070;
+  --text-menu: #ffffff;
+  --text-link: #6dd58c;
+  --text-link-hover: #5bc47a;
+  --text-link-alt: #5dd39e;
+
+  // Borders - Darker borders for dark mode
+  --border-light: #3a3a3a;
+  --border-lighter: #333333;
+  --border-medium: #404040;
+  --border-dark: #4a4a4a;
+  --border-darker: #5a5a5a;
+
+  // Accents - Slightly adjusted for dark mode
+  --accent-primary: #7a8a92;
+  --accent-success: #5dd39e;
+  --accent-success-alt: #6dd58c;
+  --accent-error: #ff5722;
+  --accent-error-alt: #f44336;
+
+  // Shadows - More subtle in dark mode
+  --shadow-light: rgba(0, 0, 0, 0.3);
+  --shadow-medium: rgba(0, 0, 0, 0.5);
+
+  // Opacity
+  --opacity-done: 0.4;
+
+  // Drag styling - slightly lighter than bg-hover for visibility
+  --bg-drag: #3a4255;
+  --opacity-drag: 0.95;
+  --shadow-drag: 0 4px 12px rgba(0, 0, 0, 0.4);
+
+  // iView Component Overrides for Dark Mode
+  // Main background (if not set, opacity transition and rezising show default white background)
+  background-color: var(--bg-main);
+  .main-page {
+    background-color: var(--bg-main);
+  }
+
+  // Input fields
+  .ivu-input {
+    background-color: #1a1a1a;
+    border-color: #404040;
+    color: #e0e0e0;
+
+    &:hover {
+      border-color: #5a5a5a;
+    }
+
+    &:focus {
+      border-color: #7a8a92;
+      box-shadow: 0 0 0 2px rgba(122, 138, 146, 0.2);
+    }
+
+    &::placeholder {
+      color: #707070;
+    }
+  }
+
+  .ivu-input-disabled {
+    background-color: #2a2a2a;
+    color: #606060;
+    border-color: #333333;
+  }
+
+  // Textareas
+  textarea.ivu-input {
+    background-color: #1a1a1a;
+    border-color: #404040;
+    color: #e0e0e0;
+  }
+
+  // Checkboxes
+  .ivu-checkbox-wrapper {
+    color: #e0e0e0;
+  }
+
+  .ivu-checkbox-inner {
+    background-color: #1a1a1a;
+    border-color: #404040;
+
+    &:hover {
+      border-color: #5a5a5a;
+    }
+  }
+
+  .ivu-checkbox-checked .ivu-checkbox-inner {
+    background-color: #5dd39e;
+    border-color: #5dd39e;
+  }
+
+  .ivu-checkbox-disabled .ivu-checkbox-inner {
+    background-color: #2a2a2a;
+    border-color: #333333;
+  }
+
+  // Switch component
+  .ivu-switch {
+    background-color: #404040;
+
+    &:after {
+      background-color: #ffffff;
+    }
+  }
+
+  .ivu-switch-checked {
+    background-color: #5dd39e;
+    border-color: #5dd39e;
+  }
+
+  // Buttons
+  .ivu-btn {
+    color: #e0e0e0;
+    background-color: transparent;
+    border-color: #404040;
+
+    &:hover {
+      color: #ffffff;
+      background-color: #3a3a3a;
+      border-color: #5a5a5a;
+    }
+  }
+
+  .ivu-btn-primary {
+    color: #ffffff;
+    background-color: #7a8a92;
+    border-color: #7a8a92;
+
+    &:hover {
+      background-color: #8a9aa2;
+      border-color: #8a9aa2;
+    }
+  }
+
+  // Modals
+  .ivu-modal-content {
+    background-color: #2a2a2a;
+    color: var(--text-primary);
+  }
+
+  .ivu-modal-header {
+    background-color: #2a2a2a;
+    border-bottom-color: #404040;
+    color: var(--text-primary);
+
+    .ivu-modal-header-inner {
+      color: var(--text-primary);
+    }
+  }
+  .ivu-modal-confirm-head {
+    .ivu-modal-confirm-head-title {
+      color: var(--text-primary);
+    }
+  }
+  .ivu-modal-confirm-body {
+    color: var(--text-secondary);
+  }
+
+  .ivu-modal-footer {
+    background-color: #2a2a2a;
+    border-top-color: #404040;
+  }
+
+  .ivu-modal-close {
+    color: #a0a0a0;
+
+    &:hover {
+      color: #e0e0e0;
+    }
+  }
+
+  // Tooltips
+  .ivu-tooltip-inner {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+  }
+
+  .ivu-tooltip-arrow {
+    border-top-color: #1a1a1a;
+  }
+
+  // Progress bar
+  .ivu-progress-bg {
+    background-color: #5dd39e;
+  }
+
+  .ivu-progress-outer {
+    background-color: #333333;
+  }
+
+  // Dropdown
+  .ivu-dropdown-menu {
+    background-color: #2a2a2a;
+    border-color: #404040;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+  }
+
+  .ivu-dropdown-item {
+    color: #e0e0e0;
+    border-top-color: #404040;
+    border-bottom-color: #404040;
+
+    &:hover {
+      background-color: #3a3a3a;
+    }
+  }
+
+  .ivu-select-dropdown {
+    background-color: #2a2a2a;
+    border-color: #404040;
+  }
+
+  // Message notifications
+  .ivu-message-notice-content {
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+  }
+
+  .ivu-message-success .ivu-icon {
+    color: #5dd39e;
+  }
+
+  .ivu-message-error .ivu-icon {
+    color: #ff5722;
+  }
+
+  // Scrollbar styling for dark theme
+  scrollbar-color: #505050 transparent;
+}
+
+// Dark theme webkit scrollbar overrides
+.dark-theme::-webkit-scrollbar-thumb {
+  background-color: #505050;
+}
+
+.dark-theme::-webkit-scrollbar-thumb:hover {
+  background-color: #707070;
+}

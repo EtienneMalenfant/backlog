@@ -1,14 +1,17 @@
-const low = require('lowdb');
-const FileSync = require('lowdb/adapters/FileSync');
-const lodashId = require('lodash-id');
+import low from 'lowdb';
+import FileSync from 'lowdb/adapters/FileSync';
+import lodashId from 'lodash-id';
+import { ipcRenderer } from 'electron';
 
-const userDataPath = require('electron').remote.getCurrentWindow().userDataPath;
+const userDataPath = ipcRenderer.sendSync('app:getUserDataPath');
+
+if (!userDataPath) {
+	throw new Error('Failed to retrieve user data path from main process via IPC.');
+}
 
 const dataAdapter = new FileSync(userDataPath);
 let db = low(dataAdapter);
 
 db._.mixin(lodashId);
 
-module.exports = {
-  db
-};
+export { db };

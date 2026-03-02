@@ -57,8 +57,7 @@
   import UpdatesCheckSettings from "./UpdatesCheckSettings";
   import DatabaseLocation from "./DatabaseLocation";
 
-  const {shell} = require("electron");
-  const {dialog} = require("electron").remote;
+  import { shell, ipcRenderer } from "electron";
 
   export default {
     name: "settings-modal",
@@ -87,36 +86,38 @@
       },
       createBackup() {
         const vm = this;
-        dialog.showSaveDialog({
+        ipcRenderer.invoke('dialog:showSave', {
           filters: [
             {name: "json", extensions: ["json"]},
           ],
-        }, function(fileName) {
+        }).then((result) => {
+          if (result.canceled || !result.filePath) {
+            return;
+          }
           boardsRepository
-            .exportDbToJSON(fileName)
+            .exportDbToJSON(result.filePath)
             .then(() => {
-              vm.$Message.success(this.$t('modals.file_saved_success'));
+              vm.$Message.success(vm.$t('modals.file_saved_success'));
             })
             .catch((err) => {
-              if(fileName == ''){
-                return;
-              }
-              
               vm.$Message.error({content: err.message, duration: 0, closable: true});
             });
         });
       },
       importBackup() {
         const vm = this;
-        dialog.showOpenDialog({
+        ipcRenderer.invoke('dialog:showOpen', {
           properties: ["openFile"],
           filters: [
             {name: "json", extensions: ["json"]},
           ],
-        }, function(filePath) {
-          boardsRepository.importDbFromJSON(filePath[0])
+        }).then((result) => {
+          if (result.canceled || !result.filePaths || !result.filePaths[0]) {
+            return;
+          }
+          boardsRepository.importDbFromJSON(result.filePaths[0])
             .then(() => {
-              vm.$Message.success(this.$t('modals.file_imported_success'));
+              vm.$Message.success(vm.$t('modals.file_imported_success'));
               vm.$store.dispatch("fetchBoards");
             })
             .catch((err) => {
@@ -137,15 +138,18 @@
       },
       openSaveDialog(boardId) {
         const vm = this;
-        dialog.showSaveDialog({
+        ipcRenderer.invoke('dialog:showSave', {
           filters: [
             {name: "JSON", extensions: ["json"]},
           ],
-        }, function(fileName) {
+        }).then((result) => {
+          if (result.canceled || !result.filePath) {
+            return;
+          }
           boardsRepository
-            .exportBoardToJSON(fileName, boardId)
+            .exportBoardToJSON(result.filePath, boardId)
             .then(() => {
-              vm.$Message.success(this.$t('modals.file_saved_success'));
+              vm.$Message.success(vm.$t('modals.file_saved_success'));
             })
             .catch((err) => {
               vm.$Message.error({content: err.message, duration: 0, closable: true});
@@ -162,7 +166,7 @@
   }
 
   .row.title-row {
-    border-bottom: 1px solid #f3f3f3;
+    border-bottom: 1px solid var(--border-lighter);
     padding-bottom: 10px;
     margin-bottom: 20px;
     font-size: 1.5em;

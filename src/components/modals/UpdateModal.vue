@@ -14,7 +14,8 @@
 </template>
 
 <script>
-  const { shell } = require('electron');
+  import electron from 'electron';
+  const { shell } = electron;
 
   export default {
     name: 'UpdateModal',

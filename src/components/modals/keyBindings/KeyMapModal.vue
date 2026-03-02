@@ -83,7 +83,7 @@
 
   thead {
     font-weight: bold;
-    border-bottom: 1px solid #eaeaea;
+    border-bottom: 1px solid var(--border-light);
     margin-bottom: 4px;
   }
 
@@ -96,7 +96,7 @@
   }
 
   tbody tr {
-    border-bottom: 1px solid #f3f3f3;
+    border-bottom: 1px solid var(--border-lighter);
     cursor: pointer;
     border-radius: 4px;
     padding: 4px;
@@ -104,7 +104,7 @@
   }
 
   tbody tr:hover {
-    background-color: #f3f3f3;
+    background-color: var(--bg-hover);
   }
 
   .keymap {

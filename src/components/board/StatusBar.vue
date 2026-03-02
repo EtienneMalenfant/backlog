@@ -33,11 +33,11 @@
 
 <style scoped>
   .done-label {
-    color: #41B883;
+    color: var(--accent-success);
   }
 
   .pending-label {
-    color: rgb(172, 172, 172);
+    color: var(--text-secondary);
   }
 
 </style>

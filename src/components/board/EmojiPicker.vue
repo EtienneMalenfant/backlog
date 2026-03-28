@@ -197,7 +197,7 @@
   .emoji-container {
     user-select: none;
     position: absolute;
-    background: white;
+    background: var(--bg-card);
     height: 220px;
     z-index: 100;
     width: 160px;
@@ -206,7 +206,7 @@
     top: 100px;
     right: 99px;
     box-shadow: 0 0 8px #c7c7c7;
-    border: 1px solid #cecece;
+    border: 1px solid var(--bg-main);
     -webkit-transition: all .3s;
     -moz-transition: all .3s;
     -ms-transition: all .3s;

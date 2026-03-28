@@ -1,10 +1,11 @@
 'use strict';
 /* global __static */
 
-import {app, BrowserWindow, Menu, protocol, ipcMain, dialog} from 'electron';
+import {app, BrowserWindow, Menu, protocol} from 'electron';
 import {createProtocol} from 'vue-cli-plugin-electron-builder/lib';
 import windowRepository from './windowRepository';
-import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
+import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
+import { initDatabase, registerIpcHandlers } from './ipcHandlers'
 
 
 import path from 'path';
@@ -30,8 +31,9 @@ function createWindow(userDataPath) {
   windowConfig.icon = path.join(__static, 'icon.png');
   windowConfig.frame = false;
   windowConfig.webPreferences = {
-    nodeIntegration: true,
-    contextIsolation: false
+    nodeIntegration: false,
+    contextIsolation: true,
+    preload: path.join(__dirname, 'preload.js')
   };
 
   // Create the browser window.
@@ -91,32 +93,11 @@ app.on('activate', () => {
 app.on('ready', async() => {
   userDataPath = path.join(app.getPath('userData'), 'backlog.json');
   process.env.BACKLOG_APP_VERSION = app.getVersion();
+  process.env.BACKLOG_USER_DATA_PATH = userDataPath;
 
-  // Register IPC handlers before createWindow so they are available when the renderer starts.
-  ipcMain.on('app:getUserDataPath', (event) => {
-    event.returnValue = userDataPath;
-  });
-
-  ipcMain.on('app:quit', () => {
-    app.quit();
-  });
-
-  ipcMain.on('window:minimize', (event) => {
-    const win = BrowserWindow.fromWebContents(event.sender);
-    if (win) {
-      win.minimize();
-    }
-  });
-
-  ipcMain.handle('dialog:showSave', async(event, options) => {
-    const result = await dialog.showSaveDialog(options);
-    return result;
-  });
-
-  ipcMain.handle('dialog:showOpen', async(event, options) => {
-    const result = await dialog.showOpenDialog(options);
-    return result;
-  });
+  // Initialise the database and register all IPC handlers before creating the window.
+  initDatabase(userDataPath);
+  registerIpcHandlers(app.getVersion(), userDataPath);
 
   if (isDevelopment && !process.env.IS_TEST) {
     // Install Vue Devtools

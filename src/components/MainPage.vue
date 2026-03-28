@@ -41,12 +41,13 @@
       DuplicateBoardModal,
       FindItemModal, SettingsModal, RenameBoardModal, NewBoardModal, BoardsMenu, KeyMapModal,
     },
-    created() {
+    async created() {
       this.$store.dispatch('setSystem', window.navigator.platform.toLowerCase());
-      this.$store.dispatch('fetchSettings');
+      await this.$store.dispatch('fetchSettings');
+      await this.$store.dispatch('setupKeyBindings');
 
       // this.versionCheck()
-      this.$store.dispatch('fetchBoards');
+      await this.$store.dispatch('fetchBoards');
       if (this.$store.state.settings.token && this.$store.state.settings.username) {
         this.initialSyncBoards();
         setTimeout(this.patchSyncBoards, 1000 * 30);
@@ -56,8 +57,11 @@
       } else {
         this.$i18n.locale = this.$store.state.settings.language;
       }
-      this.$store.dispatch('fetchActiveBoard');
-      this.$router.push({path: `/board/${this.activeBoardId}`});
+      await this.$store.dispatch('fetchActiveBoard');
+      const target = `/board/${this.activeBoardId}`;
+      if (this.$route.path !== target) {
+        this.$router.push({path: target});
+      }
       this.$nextTick().then(() => this.$bus.$emit('appInit', this.selectedTab));
     },
     computed: {

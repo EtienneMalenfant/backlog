@@ -62,9 +62,6 @@
 
   .icon-more {
     opacity: 0;
-    position: absolute;
-    right: 8px;
-    top: 8px;
     cursor: pointer;
     -webkit-transition: opacity .3s;
     transition: opacity .3s;

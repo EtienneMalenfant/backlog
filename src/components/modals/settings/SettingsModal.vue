@@ -57,8 +57,6 @@
   import UpdatesCheckSettings from "./UpdatesCheckSettings";
   import DatabaseLocation from "./DatabaseLocation";
 
-  import { shell, ipcRenderer } from "electron";
-
   export default {
     name: "settings-modal",
     components: {
@@ -79,14 +77,14 @@
     },
     methods: {
       open(link) {
-        shell.openExternal(link);
+        window.electronAPI.shell.openExternal(link);
       },
       changeLanguage() {
         this.$store.dispatch("showLanguageModal");
       },
       createBackup() {
         const vm = this;
-        ipcRenderer.invoke('dialog:showSave', {
+        window.electronAPI.dialog.showSave({
           filters: [
             {name: "json", extensions: ["json"]},
           ],
@@ -106,7 +104,7 @@
       },
       importBackup() {
         const vm = this;
-        ipcRenderer.invoke('dialog:showOpen', {
+        window.electronAPI.dialog.showOpen({
           properties: ["openFile"],
           filters: [
             {name: "json", extensions: ["json"]},
@@ -138,7 +136,7 @@
       },
       openSaveDialog(boardId) {
         const vm = this;
-        ipcRenderer.invoke('dialog:showSave', {
+        window.electronAPI.dialog.showSave({
           filters: [
             {name: "JSON", extensions: ["json"]},
           ],

@@ -32,10 +32,7 @@
 
 <script>
   import axios from 'axios';
-  import { shell } from 'electron';
-  import processModule from 'process';
-  const { env } = processModule;
-  const version = env.BACKLOG_APP_VERSION || "";
+  const version = (window.electronAPI && window.electronAPI.app.getVersion()) || "";
 
   export default {
     name: 'UpdatesCheckSettings',
@@ -74,7 +71,7 @@
           });
       },
       open (link) {
-        shell.openExternal(link);
+        window.electronAPI.shell.openExternal(link);
       }
     }
   };

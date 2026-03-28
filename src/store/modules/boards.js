@@ -1,7 +1,6 @@
 import boardsRepository from "./../../repositories/boardsRepository";
 import itemsRepository from "./../../repositories/itemsRepository";
 import EmojiIcons from "./../../assets/emojiIcons";
-import syncRepository from "../../repositories/syncRepository";
 
 const state = {
   activeBoard: {},
@@ -21,8 +20,12 @@ const state = {
 
 const mutations = {
   SET_ACTIVE_BOARD(state, board) {
+    if (!board) {
+      state.activeBoard = state.boardsList[0] || {};
+      return;
+    }
     const activeBoard = state.boardsList.find((b) => b.id === board.id);
-    state.activeBoard = activeBoard;
+    state.activeBoard = activeBoard || state.boardsList[0] || {};
   },
   SET_BOARD_ITEMS(state, items) {
     state.boardItems = items;
@@ -51,102 +54,106 @@ const mutations = {
 };
 
 const actions = {
-  addItem({state}, {boardId, newItem}) {
+  async addItem({state}, {boardId, newItem}) {
     const activeBoard = state.boardsList.find((board) => board.id === boardId);
     if (activeBoard.prependNewItem === true) {
-      return boardsRepository.addItemToBegin(boardId, newItem);
+      return await boardsRepository.addItemToBegin(boardId, newItem);
     } else {
-      return boardsRepository.addItemToEnd(boardId, newItem);
+      return await boardsRepository.addItemToEnd(boardId, newItem);
     }
   },
-  changeBoardsOrder(context, moved) {
-    boardsRepository.changeBoardsOrder(moved);
+  async changeBoardsOrder(context, moved) {
+    await boardsRepository.changeBoardsOrder(moved);
   },
   changeFindItem({commit}, val) {
     commit("SET_FIND_ITEM_TEXT", val);
   },
-  changeIsDone(context, {boardId, itemId, newVal}) {
-    itemsRepository.switchIsDone(boardId, itemId, newVal);
+  async changeIsDone(context, {boardId, itemId, newVal}) {
+    await itemsRepository.switchIsDone(boardId, itemId, newVal);
   },
-  changeItemVal(context, {boardId, itemId, newVal}) {
-    itemsRepository.changeItemValue(boardId, itemId, newVal);
+  async changeItemVal(context, {boardId, itemId, newVal}) {
+    await itemsRepository.changeItemValue(boardId, itemId, newVal);
   },
-  fetchActiveBoard({commit}) {
-    const board = boardsRepository.getBoardById(boardsRepository.getActiveBoard());
+  async fetchActiveBoard({commit}) {
+    const activeBoardId = await boardsRepository.getActiveBoard();
+    const board = await boardsRepository.getBoardById(activeBoardId);
     commit("SET_ACTIVE_BOARD", board);
   },
-  fetchBoardItems({commit}, boardId) {
-    commit("SET_BOARD_ITEMS", boardsRepository.getBoardItems(boardId));
+  async fetchBoardItems({commit}, boardId) {
+    const items = await boardsRepository.getBoardItems(boardId);
+    commit("SET_BOARD_ITEMS", items);
   },
-  fetchBoards({commit}) {
-    commit("SET_BOARDS", boardsRepository.getList());
+  async fetchBoards({commit}) {
+    const list = await boardsRepository.getList();
+    commit("SET_BOARDS", list);
   },
-  fetchRawBoards({commit}) {
-    commit("SET_RAW_BOARDS", boardsRepository.getRawBoards());
+  async fetchRawBoards({commit}) {
+    const boards = await boardsRepository.getRawBoards();
+    commit("SET_RAW_BOARDS", boards);
   },
-  itemsOrderChanged(context, {moved, boardId}) {
-    boardsRepository.changeItemsOrder(boardId, moved);
+  async itemsOrderChanged(context, {moved, boardId}) {
+    await boardsRepository.changeItemsOrder(boardId, moved);
   },
-  moveItemToBoard({commit}, {srcBoardId, dstBoardId, itemId}) {
-    boardsRepository.moveItemToBoard(srcBoardId, dstBoardId, itemId);
-    actions.fetchBoards({commit});
+  async moveItemToBoard({dispatch}, {srcBoardId, dstBoardId, itemId}) {
+    await boardsRepository.moveItemToBoard(srcBoardId, dstBoardId, itemId);
+    await dispatch("fetchBoards");
   },
-  moveItemToBottom(context, {boardId, itemId}) {
-    boardsRepository.moveItemToBottom(boardId, itemId);
+  async moveItemToBottom(context, {boardId, itemId}) {
+    await boardsRepository.moveItemToBottom(boardId, itemId);
   },
-  moveItemToTop(context, {boardId, itemId}) {
-    boardsRepository.moveItemToTop(boardId, itemId);
+  async moveItemToTop(context, {boardId, itemId}) {
+    await boardsRepository.moveItemToTop(boardId, itemId);
   },
-  removeBoard(context, boardId) {
-    boardsRepository.removeBoard(boardId);
+  async removeBoard(context, boardId) {
+    await boardsRepository.removeBoard(boardId);
   },
-  removeItem({commit}, {boardId, itemId}) {
-    itemsRepository.removeItem(boardId, itemId);
-    actions.fetchBoards({commit});
+  async removeItem({dispatch}, {boardId, itemId}) {
+    await itemsRepository.removeItem(boardId, itemId);
+    await dispatch("fetchBoards");
   },
-  renameBoard(context, {boardId, newName}) {
-    boardsRepository.renameBoard(boardId, newName);
+  async renameBoard(context, {boardId, newName}) {
+    await boardsRepository.renameBoard(boardId, newName);
   },
-  saveNewBoard({commit, rootState}, boardName) {
-    const savedBoard = boardsRepository.addNewBoard(boardName, rootState.settings);
-    actions.fetchBoards({commit});
+  async saveNewBoard({commit, dispatch, rootState}, boardName) {
+    const savedBoard = await boardsRepository.addNewBoard(boardName, rootState.settings);
+    await dispatch("fetchBoards");
     commit("SET_ACTIVE_BOARD", savedBoard);
     return savedBoard.id;
   },
-  setActiveBoard({commit}, boardId) {
-    boardsRepository.setActiveBoard(boardId);
-    const board = boardsRepository.getBoardById(boardId);
+  async setActiveBoard({commit}, boardId) {
+    await boardsRepository.setActiveBoard(boardId);
+    const board = await boardsRepository.getBoardById(boardId);
     commit("SET_ACTIVE_BOARD", board);
   },
-  setFirstBoardAsActiveBoard({commit}) {
-    const activeBoard = boardsRepository.getFirstBoard();
-    boardsRepository.setActiveBoard(activeBoard.id);
+  async setFirstBoardAsActiveBoard({commit}) {
+    const activeBoard = await boardsRepository.getFirstBoard();
+    await boardsRepository.setActiveBoard(activeBoard.id);
     commit("SET_ACTIVE_BOARD", activeBoard);
     return activeBoard.id;
   },
   setIsSubmittingNewItem({commit}, val) {
     commit("SET_IS_SUBMITTING_NEW_ITEM", val);
   },
-  switchPrependNewItem({commit}, {boardId, prependNewItem}) {
-    itemsRepository.switchPrependNewItem(boardId, prependNewItem);
+  async switchPrependNewItem({commit}, {boardId, prependNewItem}) {
+    await itemsRepository.switchPrependNewItem(boardId, prependNewItem);
     commit("SWITCH_PREPEND_NEW_ITEM", {boardId, prependNewItem});
   },
-  switchShowDone({commit}, {boardId, showDone}) {
-    boardsRepository.switchShowDone(boardId, showDone);
+  async switchShowDone({commit}, {boardId, showDone}) {
+    await boardsRepository.switchShowDone(boardId, showDone);
     commit("SWITCH_SHOW_DONE", {boardId, showDone});
   },
-  switchShowProgress({commit}, {boardId, val}) {
-    itemsRepository.switchShowProgress(boardId, val);
+  async switchShowProgress({commit}, {boardId, val}) {
+    await itemsRepository.switchShowProgress(boardId, val);
     commit("SWITCH_SHOW_PROGRESS", val);
   },
-  syncBoardsDone({dispatch}, boards) {
-    boardsRepository.saveBoardsArray(boards, true);
-    dispatch("fetchBoards");
-    dispatch("fetchRawBoards");
+  async syncBoardsDone({dispatch}, boards) {
+    await boardsRepository.saveBoardsArray(boards, true);
+    await dispatch("fetchBoards");
+    await dispatch("fetchRawBoards");
   },
-  updateLastSync({commit}, syncDate) {
+  async updateLastSync({commit}, syncDate) {
     commit("SET_CLOUD_LAST_SYNC", syncDate);
-    syncRepository.updateLastSync(syncDate);
+    await window.electronAPI.db.sync.updateLastSync(syncDate);
   }
 };
 

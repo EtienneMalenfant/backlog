@@ -66,24 +66,25 @@
             @dblclick="editItem"
       >
       </span>
-      <Icon type="ios-brush-outline"
-            class="edit-icon"
-            @click="editItem"
-            v-if="!isEditing"
-            size="16"/>
+      <div class="end-controls">
+        <Icon type="ios-brush-outline"
+              class="edit-icon"
+              @click="editItem"
+              v-if="!isEditing"
+              size="16"/>
 
-      <div class="drag">
-        <Icon type="md-reorder"></Icon>
+        <div class="drag">
+          <Icon type="md-reorder"></Icon>
+        </div>
+
+        <BoardItemCalendar :created="created" v-if="showDate" class="board-item-calendar"/>
+        <ActionButtons @remove="removeItem"
+                      @moveToTop="moveItemToTop"
+                      @moveToBottom="moveItemToBottom"
+                      :boardId="boardId"
+        >
+        </ActionButtons>
       </div>
-
-      <ActionButtons @remove="removeItem"
-                     @moveToTop="moveItemToTop"
-                     @moveToBottom="moveItemToBottom"
-                     :boardId="boardId"
-      >
-      </ActionButtons>
-
-      <BoardItemCalendar :created="created" v-if="showDate"/>
     </div>
   </div>
 </template>
@@ -95,8 +96,7 @@
   import keyShortcutMixin from './../../../keyShortcutStringMixin';
   import EmojiPicker from './../EmojiPicker';
   import EmojiButton from './EmojiButton';
-  import electron from 'electron';
-  const { shell } = electron;
+
 
   const md = new MarkdownIt({
     breaks: true
@@ -218,7 +218,7 @@
         this.$bus.$emit('focusOnAddItem');
       },
       open (link) {
-        shell.openExternal(link);
+        window.electronAPI.shell.openExternal(link);
       },
       handleLinkClick (event) {
         event.preventDefault();
@@ -255,7 +255,7 @@
   };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 
   .emoji-btn {
     position: absolute;
@@ -264,7 +264,7 @@
     z-index: 100;
   }
 
-  .emoji-btn >>> i {
+  .emoji-btn ::v-deep i {
     margin-top: 1px;
   }
 
@@ -276,10 +276,6 @@
     line-height: 1em;
   }
 
-  .item {
-    transition: all .3s;
-  }
-
   .item.newlyAddedItem {
     box-shadow: inset 0 0 70px var(--shadow-light);
     border: 1px solid var(--accent-primary);
@@ -287,7 +283,6 @@
 
   .item-text {
     font-size: 1.2em;
-    margin-top: 9px;
     color: var(--text-primary);
   }
 
@@ -298,39 +293,53 @@
   .drag {
     display: flex;
     align-items: center;
-    margin-left: auto;
-    margin-top: 8px;
     font-size: 2em;
     cursor: grab;
-    opacity: 0;
-    transition: opacity .3s;
-  }
 
-  .drag:active {
-    cursor: grabbing;
-  }
-
-  .item-div:hover .drag {
-    opacity: 1;
+    &:active {
+      cursor: grabbing;
+    }
   }
 
   .item-div {
-    max-width: 90%;
     display: flex;
+    padding-right: 7px;
+
+    &:hover {
+      .end-controls > * {
+        opacity: 1;
+        transition: opacity .3s;
+      }
+    }
+
+    .end-controls {
+      display: flex;
+      align-items: center;
+      margin-left: auto;
+      gap: 0.5rem;
+
+      & > * {
+        opacity: 0;
+      }
+    }
   }
 
   .item {
     border-bottom: 1px solid var(--border-light);
     position: relative;
+    padding: 9px 0;
     min-height: 40px;
     -webkit-border-radius: 3px;
     transition: background-color 0.3s ease, border-color 0.3s ease;
-  }
 
-  .item:hover {
-    background-color: var(--bg-hover);
-  }
+    &:hover {
+      background-color: var(--bg-hover);
+    }
 
+    &.doneItem {
+      opacity: var(--opacity-done);
+    }
+  }
 
   .ok-edit-btns {
     margin-left: 25px;
@@ -339,16 +348,10 @@
   }
 
   .edit-icon {
-    opacity: 0;
     cursor: pointer;
-    transition: opacity .3s;
-    margin-top: 12px;
+    display: flex;
+    align-items: center;
   }
-
-  .item-div:hover .edit-icon {
-    opacity: 1;
-  }
-
 
   .movable-icon {
     position: absolute;
@@ -356,18 +359,6 @@
     font-size: 2em;
     transition: all .25s;
     /*left: !*opacity: 0;*!*/
-  }
-
-  .item.doneItem {
-    opacity: var(--opacity-done);
-  }
-
-  .item:hover .actionBtns {
-    opacity: 1;
-  }
-
-  .item:hover .movable-icon {
-    opacity: 1
   }
 
   .actionBtns {
@@ -383,7 +374,7 @@
   }
 
   .item label {
-    margin-top: 12px;
+    margin-top: 2px;
     padding-left: 5px;
     font-size: 1.3em;
     cursor: pointer;
@@ -397,7 +388,6 @@
   }
 
   textarea.draftText {
-    margin-top: 8px;
     margin-left: 25px;
     transition: all .3s;
     width: 90%;
@@ -414,7 +404,7 @@
     color: var(--text-link-hover) !important;
   }
 
-  .item >>> .link {
+  .item ::v-deep .link {
     color: var(--text-link-alt);
     font-style: italic;
     cursor: pointer;
@@ -425,7 +415,7 @@
     transition: all .3s;
   }
 
-  .item >>> .link:hover {
+  .item ::v-deep .link:hover {
     color: var(--text-link-hover);
   }
 

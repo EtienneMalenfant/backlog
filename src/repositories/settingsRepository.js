@@ -1,105 +1,43 @@
-import { db } from "./../persistence";
+// Renderer-side settings repository — thin async wrapper over IPC.
+// The keyBindings default object is kept here as pure data (no Node dependency).
 
 const keyBindings = {
-  acceptItemChange: {
-    mac: ["meta", "enter"],
-    win: ["ctrl", "enter"]
-  },
-  addNewBoard: {
-    win: ["ctrl", "shift", "n"],
-    mac: ["meta", "shift", "n"]
-  },
-  cancelItemChange: {
-    mac: ["esc"],
-    win: ["esc"]
-  },
-  filterItemsFocus: {
-    mac: ["meta", "f"],
-    win: ["ctrl", "f"]
-  },
-  newItemFocus: {
-    mac: ["meta", "n"],
-    win: ["ctrl", "n"]
-  },
-  nextTab: {
-    win: ["ctrl", "shift", "}"],
-    mac: ["meta", "shift", "]"]
-  },
-  prevTab: {
-    win: ["ctrl", "shift", "{"],
-    mac: ["meta", "shift", "["]
-  },
-  showEmoji: {
-    readonly: true,
-    mac: ["meta", "e"],
-    win: ["ctrl", "e"]
-  },
-  showFindItem: {
-    mac: ["meta", "shift", "f"],
-    win: ["ctrl", "shift", "f"]
-  },
-  showKeymap: {
-    win: ["ctrl", "k"],
-    mac: ["meta", "k"]
-  }
+  acceptItemChange: { mac: ['meta', 'enter'], win: ['ctrl', 'enter'] },
+  addNewBoard:      { win: ['ctrl', 'shift', 'n'], mac: ['meta', 'shift', 'n'] },
+  cancelItemChange: { mac: ['esc'], win: ['esc'] },
+  filterItemsFocus: { mac: ['meta', 'f'], win: ['ctrl', 'f'] },
+  newItemFocus:     { mac: ['meta', 'n'], win: ['ctrl', 'n'] },
+  nextTab:          { win: ['ctrl', 'shift', '}'], mac: ['meta', 'shift', ']'] },
+  prevTab:          { win: ['ctrl', 'shift', '{'], mac: ['meta', 'shift', '['] },
+  showEmoji:        { readonly: true, mac: ['meta', 'e'], win: ['ctrl', 'e'] },
+  showFindItem:     { mac: ['meta', 'shift', 'f'], win: ['ctrl', 'shift', 'f'] },
+  showKeymap:       { win: ['ctrl', 'k'], mac: ['meta', 'k'] },
 };
-
-db.defaults({
-  appSettings: {
-    "itemCreationDate": true,
-    "keyBindings": keyBindings,
-    "prependNewItems": true,
-    "showUpdates": true,
-    "token": "",
-    "username": "",
-    "wasImported": false,
-    "language": "en"
-  }
-}).write();
 
 export default {
   addKeyBinding(keyId, keyCombinations) {
-    return db
-      .get(`appSettings.keyBindings`)
-      .set(keyId, keyCombinations)
-      .write();
+    return window.electronAPI.db.settings.addKeyBinding(keyId, keyCombinations);
   },
   getAppSettings() {
-    return db.get("appSettings")
-      .cloneDeep()
-      .value();
+    return window.electronAPI.db.settings.getAppSettings();
   },
   getKeyBindings() {
-    return db.get("appSettings.keyBindings")
-      .cloneDeep()
-      .value();
+    return window.electronAPI.db.settings.getKeyBindings();
   },
   hasKeyBindingsProperty() {
-    return db.has("appSettings.keyBindings").value();
+    return window.electronAPI.db.settings.hasKeyBindingsProperty();
   },
   hasLanguageProperty() {
-    return db.has("appSettings.language").value();
+    return window.electronAPI.db.settings.hasLanguageProperty();
   },
   keyBindings,
   setupKeyBindings() {
-    this.updateAppSettings({"keyBindings": keyBindings});
+    return window.electronAPI.db.settings.setupKeyBindings();
   },
   updateAppSettings(updateProp) {
-    return db.get("appSettings")
-      .assign(updateProp)
-      .write();
+    return window.electronAPI.db.settings.updateAppSettings(updateProp);
   },
   updateKeyBinding(keyId, combination, isMac) {
-    if (isMac) {
-      return db
-        .get(`appSettings.keyBindings.${keyId}`)
-        .set("mac", combination)
-        .write();
-    } else {
-      return db
-        .get(`appSettings.keyBindings.${keyId}`)
-        .set("win", combination)
-        .write();
-    }
-  }
+    return window.electronAPI.db.settings.updateKeyBinding(keyId, combination, isMac);
+  },
 };

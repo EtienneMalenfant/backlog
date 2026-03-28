@@ -1,8 +1,6 @@
 import boardsRepository from "./../../repositories/boardsRepository";
 
-import processModule from "process";
-const { env } = processModule;
-const version = env.BACKLOG_APP_VERSION || "";
+const version = (window.electronAPI && window.electronAPI.app.getVersion()) || "";
 
 const state = {
   cloud: {
@@ -124,8 +122,8 @@ const mutations = {
 };
 
 const actions = {
-  duplicateBoard(context, {newName, boardId}) {
-    boardsRepository.duplicateBoard(boardId, newName);
+  async duplicateBoard(context, {newName, boardId}) {
+    await boardsRepository.duplicateBoard(boardId, newName);
   },
   hideCloudModal({commit}) {
     commit("HIDE_CLOUD");

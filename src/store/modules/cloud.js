@@ -41,14 +41,14 @@ const actions = {
   setConnectionError({commit}, val) {
     commit("SET_CONNECTION_ERROR", val);
   },
-  setCloudToken({commit}, {token, username}) {
+  async setCloudToken({commit}, {token, username}) {
     commit("SET_CLOUD_TOKEN", token);
     commit("SET_CLOUD_USER", username);
-    settingsRepository.updateAppSettings({token});
-    settingsRepository.updateAppSettings({username});
+    await settingsRepository.updateAppSettings({token});
+    await settingsRepository.updateAppSettings({username});
   },
-  resetSyncQueue() {
-    syncRepository.resetQueue();
+  async resetSyncQueue() {
+    await syncRepository.resetQueue();
   },
   setIsSyncing({commit}, val) {
     commit("SET_SYNC_IN_PROGRESS", val);

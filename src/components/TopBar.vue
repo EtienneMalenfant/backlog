@@ -16,8 +16,6 @@
 </template>
 
 <script>
-  import { ipcRenderer } from 'electron';
-
   export default {
     name: 'TopBar',
     computed: {
@@ -27,10 +25,10 @@
     },
     methods: {
       closeApp () {
-        ipcRenderer.send('app:quit');
+        window.electronAPI.app.quit();
       },
       minimize () {
-        ipcRenderer.send('window:minimize');
+        window.electronAPI.window.minimize();
       }
     }
   };

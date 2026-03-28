@@ -1,87 +1,19 @@
-import syncRepository from "./syncRepository";
-
-import { db } from "./../persistence";
+// Renderer-side items repository — thin async wrapper over IPC.
 
 export default {
   changeItemValue(boardId, itemId, itemVal) {
-    const board = db
-      .get("boards")
-      .find({id: boardId});
-
-    board.assign({"updated": new Date()}).write();
-    const oldBoardVal = board.cloneDeep().value();
-    board
-      .get("items")
-      .find({id: itemId})
-      .assign({
-        text: itemVal,
-        updated: new Date()
-      })
-      .write();
-    const newBoardVal = board.cloneDeep().value();
-    syncRepository.addToSyncQueue(oldBoardVal, newBoardVal);
+    return window.electronAPI.db.items.changeItemValue(boardId, itemId, itemVal);
   },
   removeItem(boardId, itemId) {
-    const board = db
-      .get("boards")
-      .find({id: boardId});
-
-    board.assign({"updated": new Date()}).write();
-    const oldBoardVal = board.cloneDeep().value();
-    board
-      .get("items")
-      .remove({id: itemId})
-      .write();
-    const newBoardVal = board.cloneDeep().value();
-    syncRepository.addToSyncQueue(oldBoardVal, newBoardVal);
+    return window.electronAPI.db.items.removeItem(boardId, itemId);
   },
   switchIsDone(boardId, itemId, value) {
-    const board = db
-      .get("boards")
-      .find({id: boardId});
-
-    board.assign({"updated": new Date()}).write();
-    const oldBoardVal = board.cloneDeep().value();
-
-    const res = board
-      .get("items")
-      .find({id: itemId})
-      .assign({
-        isDone: value,
-        updated: new Date()
-      })
-      .write();
-    const newBoardVal = board.cloneDeep().value();
-    syncRepository.addToSyncQueue(oldBoardVal, newBoardVal);
-
-    return res;
+    return window.electronAPI.db.items.switchIsDone(boardId, itemId, value);
   },
   switchPrependNewItem(boardId, value) {
-    const board = db
-      .get("boards")
-      .find({id: boardId});
-    const oldBoardVal = board.cloneDeep().value();
-
-    const res = board
-      .assign({prependNewItem: value})
-      .write();
-    const newBoardVal = board.cloneDeep().value();
-    syncRepository.addToSyncQueue(oldBoardVal, newBoardVal);
-
-    return res;
+    return window.electronAPI.db.items.switchPrependNewItem(boardId, value);
   },
   switchShowProgress(boardId, val) {
-    const board = db
-      .get("boards")
-      .find({id: boardId});
-    const oldBoardVal = board.cloneDeep().value();
-
-    const res = board
-      .assign({showProgress: val})
-      .write();
-    const newBoardVal = board.cloneDeep().value();
-    syncRepository.addToSyncQueue(oldBoardVal, newBoardVal);
-
-    return res;
-  }
+    return window.electronAPI.db.items.switchShowProgress(boardId, val);
+  },
 };

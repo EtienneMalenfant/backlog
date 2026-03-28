@@ -59,50 +59,51 @@ const mutations = {
 };
 
 const actions = {
-  fetchSettings({commit}) {
-    const settings = settingsRepository.getAppSettings();
+  async fetchSettings({commit}) {
+    const settings = await settingsRepository.getAppSettings();
     commit('SET_CLOUD_TOKEN', settings.token);
     commit('SET_CLOUD_USER', settings.username);
     commit('SET_CLOUD_LAST_SYNC', settings.lastSync);
     commit('SET_SETTINGS', settings);
   },
-  setDbLocation({commit}, dbLocation) {
+  async setDbLocation({commit}, dbLocation) {
     commit('SET_DB_LOCATION', dbLocation);
-    settingsRepository.updateAppSettings({dbLocation});
+    await settingsRepository.updateAppSettings({dbLocation});
   },
-  setDarkTheme({commit}, darkTheme) {
+  async setDarkTheme({commit}, darkTheme) {
     commit('SET_DARK_THEME', darkTheme);
-    settingsRepository.updateAppSettings({darkTheme});
+    await settingsRepository.updateAppSettings({darkTheme});
   },
-  setItemCreationDate({commit}, itemCreationDate) {
+  async setItemCreationDate({commit}, itemCreationDate) {
     commit('SET_ITEM_CREATION_DATE', itemCreationDate);
-    settingsRepository.updateAppSettings({itemCreationDate});
+    await settingsRepository.updateAppSettings({itemCreationDate});
   },
-  setShowUpdates({commit}, showUpdates) {
+  async setShowUpdates({commit}, showUpdates) {
     commit('SET_SHOW_UPDATES', showUpdates);
-    settingsRepository.updateAppSettings({showUpdates});
+    await settingsRepository.updateAppSettings({showUpdates});
   },
-  setupKeyBindings() {
-    if (!settingsRepository.hasKeyBindingsProperty()) {
-      settingsRepository.setupKeyBindings();
-    } else { // check out if there are any missing shortcuts...
-      const repoKeys = settingsRepository.getKeyBindings();
+  async setupKeyBindings() {
+    const hasKeyBindings = await settingsRepository.hasKeyBindingsProperty();
+    if (!hasKeyBindings) {
+      await settingsRepository.setupKeyBindings();
+    } else {
+      const repoKeys = await settingsRepository.getKeyBindings();
       for (let property in settingsRepository.keyBindings) {
         if (!repoKeys[property]) {
-          settingsRepository.addKeyBinding(property, settingsRepository.keyBindings[property]);
+          await settingsRepository.addKeyBinding(property, settingsRepository.keyBindings[property]);
         }
       }
     }
   },
-  changeLanguage({commit}, code) {
-    settingsRepository.updateAppSettings({language: code});
+  async changeLanguage({commit}, code) {
+    await settingsRepository.updateAppSettings({language: code});
     commit('SET_LANGUAGE', code);
   },
-  resetKeyBindings() {
-    settingsRepository.setupKeyBindings();
+  async resetKeyBindings() {
+    await settingsRepository.setupKeyBindings();
   },
-  updateKeyBinding(context, {id, combination, isMac}) {
-    settingsRepository.updateKeyBinding(id, combination, isMac);
+  async updateKeyBinding(context, {id, combination, isMac}) {
+    await settingsRepository.updateKeyBinding(id, combination, isMac);
   },
 };
 

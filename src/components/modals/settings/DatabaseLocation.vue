@@ -6,9 +6,6 @@
 </template>
 
 <script>
-  import processModule from 'process';
-  const { env } = processModule;
-
   export default {
     name: 'DatabaseLocation',
     computed: {
@@ -23,7 +20,8 @@
     },
     created () {
       if (!this.dbLocation) {
-        this.$store.dispatch('setDbLocation', env.BACKLOG_USER_DATA_PATH || '');
+        const userDataPath = window.electronAPI.app.getUserDataPath() || '';
+        this.$store.dispatch('setDbLocation', userDataPath);
       }
     }
   };

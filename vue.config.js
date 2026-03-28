@@ -5,7 +5,9 @@ module.exports = {
         // options here will be passed to css-loader
       },
       less: {
-        javascriptEnabled: true
+        lessOptions: {
+          javascriptEnabled: true
+        }
       }
     }
   },
@@ -13,7 +15,8 @@ module.exports = {
   },
   pluginOptions: {
     electronBuilder: {
-      nodeIntegration: true
+      nodeIntegration: false,
+      preload: 'src/preload.js'
     }
   }
 };

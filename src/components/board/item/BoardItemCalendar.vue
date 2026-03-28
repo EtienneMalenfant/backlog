@@ -40,11 +40,8 @@
 
 <style scoped>
   .creationDate {
-    position: absolute;
     font-size: 1em;
     color: #979797;
-    right: 32px;
-    top: 10px;
     opacity: .8;
     cursor: pointer;
   }
